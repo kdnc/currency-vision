@@ -1,6 +1,8 @@
 package org.opencv.samples.colorblobdetect;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
@@ -30,6 +32,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
     private static final String  TAG              = "OCVSample::Activity";
 
     private boolean              mIsColorSelected = false;
+    private boolean              goneInsideFunction = false;
     private Mat                  mRgba;
     private Scalar               mBlobColorRgba;
     private Scalar               mBlobColorHsv;
@@ -37,7 +40,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
     private Mat                  mSpectrum;
     private Size                 SPECTRUM_SIZE;
     private Scalar               CONTOUR_COLOR;
-
+    
     private CameraBridgeViewBase mOpenCvCameraView;
 
     private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
@@ -46,7 +49,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS:
                 {
-                    Log.i(TAG, "OpenCV loaded successfully");
+//                    Log.i(TAG, "OpenCV loaded successfully");
                     mOpenCvCameraView.enableView();
                     mOpenCvCameraView.setOnTouchListener(ColorBlobDetectionActivity.this);
                 } break;
@@ -57,9 +60,44 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             }
         }
     };
+    
+    private String[] colors = {"cBLACK", "cWHITE", "cGREY", "cRED", "cORANGE", "cYELLOW", "cGREEN", "cAQUA", "cBLUE", "cPURPLE", "cPINK", "cRED"};
 
+
+    private String getPixelColorType(int H, int S, int V)
+    {
+    	String color;
+    	if (V < 75)
+    		color = "cBLACK";
+    	else if (V > 190 && S < 27)
+    		color = "cWHITE";
+    	else if (S < 53 && V < 185)
+    		color = "cGREY";
+    	else {	// Is a color
+    		if (H < 14)
+    			color = "cRED";
+    		else if (H < 25)
+    			color = "cORANGE";
+    		else if (H < 34)
+    			color = "cYELLOW";
+    		else if (H < 73)
+    			color = "cGREEN";
+    		else if (H < 102)
+    			color = "cAQUA";
+    		else if (H < 127)
+    			color = "cBLUE";
+    		else if (H < 149)
+    			color = "cPURPLE";
+    		else if (H < 175)
+    			color = "cPINK";
+    		else	// full circle 
+    			color = "cRED";	// back to Red
+    	}
+    	return color;
+    }
+    
     public ColorBlobDetectionActivity() {
-        Log.i(TAG, "Instantiated new " + this.getClass());
+//        Log.i(TAG, "Instantiated new " + this.getClass());
     }
 
     /** Called when the activity is first created. */
@@ -121,7 +159,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
         int x = (int)event.getX() - xOffset;
         int y = (int)event.getY() - yOffset;
 
-        Log.i(TAG, "Touch image coordinates: (" + x + ", " + y + ")");
+//        Log.i(TAG, "Touch image coordinates: (" + x + ", " + y + ")");
 
         if ((x < 0) || (y < 0) || (x > cols) || (y > rows)) return false;
 
@@ -146,8 +184,8 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 
         mBlobColorRgba = converScalarHsv2Rgba(mBlobColorHsv);
 
-        Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] +
-                ", " + mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
+//        Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] +
+//                ", " + mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
 
         mDetector.setHsvColor(mBlobColorHsv);
 
@@ -164,11 +202,86 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
 
-        if (mIsColorSelected) {
+        if (mIsColorSelected && !goneInsideFunction) {
+        	goneInsideFunction = true;
             mDetector.process(mRgba);
             List<MatOfPoint> contours = mDetector.getContours();
-            Log.e(TAG, "Contours count: " + contours.size());
-            Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
+            
+            Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_BGR2HSV);
+            
+//            Log.e(TAG, "Contours count: " + contours.size());
+//            Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
+            
+            
+            
+        	int h = mRgba.height();				// Pixel height
+        	int w = mRgba.width();				// Pixel width
+        	int rowSize = (int)mRgba.step1();		// Size of row in bytes, including extra padding
+//        	char *imOfs = imageShirtHSV->imageData;	// Pointer to the start of the image HSV pixels.
+
+        	float initialConfidence = 1.0f;
+
+        	// Create an empty tally of pixel counts for each color type
+//        	int tallyColors[NUM_COLOR_TYPES];
+//        	for (int i=0; i<NUM_COLOR_TYPES; i++)
+//        		tallyColors[i] = 0;
+        	// Scan the shirt image to find the tally of pixel colors
+        	Map<String, Integer> tallyColors = new HashMap<String, Integer>();
+        	
+        	byte[] pixelsTotal = new byte[h*rowSize];
+        	mRgba.get(0,0,pixelsTotal);
+        	
+        	for (int y=0; y<h; y++) {
+        		for (int x=0; x<w; x++) {
+        			// Get the HSV pixel components
+        			
+        			double[] pix = mRgba.get(y, x);
+        			int hVal = (int)pixelsTotal[(y*rowSize) + (x*3) + 0];	// Hue
+        			int sVal = (int)pixelsTotal[(y*rowSize) + (x*3) + 1];	// Saturation
+        			int vVal = (int)pixelsTotal[(y*rowSize) + (x*3) + 2];	// Value (Brightness)
+//        			int hVal = (int)pix[0];	// Hue
+//        			int sVal = (int)pix[1];	// Saturation
+//        			int vVal = (int)pix[2];	// Value (Brightness)
+        			
+        			
+        			// Determine what type of color the HSV pixel is.
+        			String ctype = getPixelColorType(hVal, sVal, vVal);
+        			// Keep count of these colors.
+        			int totalNum = 0;
+        			try{
+        				totalNum = tallyColors.get(ctype);
+        			} catch(Exception ex){
+        				totalNum = 0;
+        			}
+        			totalNum++;
+        			tallyColors.put(ctype, totalNum);
+//        			tallyColors[ctype]++;
+        		}
+        	}
+        	
+        	// Print a report about color types, and find the max tally
+        	//cout << "Number of pixels found using each color type (out of " << (w*h) << ":\n";
+        	int tallyMaxIndex = 0;
+        	int tallyMaxCount = -1;
+        	int pixels = w * h;
+        	for (int i=0; i<12; i++) {
+        		String v = colors[i];
+        		int pixCount;
+        		try{
+        			pixCount = tallyColors.get(v);
+	       		} catch(Exception e){
+	       			pixCount = 0;
+	       		}
+        		System.out.println(v + " - " + (pixCount*100/pixels) + "%, ");
+        		if (pixCount > tallyMaxCount) {
+        			tallyMaxCount = pixCount;
+        			tallyMaxIndex = i;
+        		}
+        	}
+        	float percentage = initialConfidence * (tallyMaxCount * 100 / pixels);
+        	System.out.println("Color of currency note: " + colors[tallyMaxIndex] + " (" + percentage + "% confidence).");
+
+        	
 
             Mat colorLabel = mRgba.submat(4, 68, 4, 68);
             colorLabel.setTo(mBlobColorRgba);
@@ -179,7 +292,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 
         return mRgba;
     }
-
+    
     private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
         Mat pointMatRgba = new Mat();
         Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);

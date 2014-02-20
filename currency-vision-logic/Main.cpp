@@ -26,6 +26,36 @@ uchar cCTHue[NUM_COLOR_TYPES] =    {0,       0,      0,     0,     20,      30, 
 uchar cCTSat[NUM_COLOR_TYPES] =    {0,       0,      0,    255,   255,     255,     255,   255,   255,    255,     255};
 uchar cCTVal[NUM_COLOR_TYPES] =    {0,      255,    120,   255,   255,     255,     255,   255,   255,    255,     255};
 
+void saveImage(IplImage *imageShirtHSV)
+{
+	int h = imageShirtHSV->height;				// Pixel height
+	int w = imageShirtHSV->width;				// Pixel width
+
+	CvSize size;
+    //IplImage *rgb_img;
+    int i = 0;
+	int j = 0;
+
+    size.height = h;
+    size.width = w;
+
+    //rgb_img = cvCreateImageHeader(size, IPL_DEPTH_8U, 3);
+    //rgb_img->imageData = my_device.ColorBuffer;
+
+    // You should NOT have the line below or OpenCV will try to deallocate your data
+    //rgb_img->imageDataOrigin = rgb_img->imageData;
+
+    //for (i = 0; i < size.height; i++)
+    //{
+        //for (j = 0;j < size.width; j++)
+        //{
+        // confirming all values print correctly
+        //printf("%c, ", imageShirtHSV->imageData[i*w + j]);
+        //}
+    //}
+
+    cvSaveImage("foo3.png",imageShirtHSV);
+}
 
 // Determine what type of color the HSV pixel is. Returns the colorType between 0 and NUM_COLOR_TYPES.
 int getPixelColorType(int H, int S, int V)
@@ -66,14 +96,14 @@ int main(int argc, const char **argv)
 	string infile = parser.get<std::string>("input");
 	string outdir = parser.get<std::string>("outdir");
 
-	char * strFileImage = new char[infile.size() + 1];
+	char *strFileImage = new char[infile.size() + 1];
 	copy(infile.begin(), infile.end(), strFileImage);
 	strFileImage[infile.size()] = '\0'; // don't forget the terminating 0
 
 	//char *strFileImage = "20_new_note_1 (Medium)_cropped.jpg";	// default file
 	//char *strFileImage = "20_new_note_1 (Medium)_cropped.jpg";
 
-	IplImage* imageIn = cvLoadImage(strFileImage, CV_LOAD_IMAGE_UNCHANGED);
+	IplImage *imageIn = cvLoadImage(strFileImage, CV_LOAD_IMAGE_UNCHANGED);
 
 	IplImage *imageShirt = cvCloneImage(imageIn);
 
@@ -125,34 +155,9 @@ int main(int argc, const char **argv)
 
 
 	//------- Saving the image
-	CvSize size;
-    //IplImage *rgb_img;
-    int i = 0;
-	int j = 0;
-
-    size.height = h;
-    size.width = w;
-
-    //rgb_img = cvCreateImageHeader(size, IPL_DEPTH_8U, 3);
-    //rgb_img->imageData = my_device.ColorBuffer;
-
-    // You should NOT have the line below or OpenCV will try to deallocate your data
-    //rgb_img->imageDataOrigin = rgb_img->imageData;
-
-    //for (i = 0; i < size.height; i++)
-    //{
-        //for (j = 0;j < size.width; j++)
-        //{
-        // confirming all values print correctly
-        //printf("%c, ", imageShirtHSV->imageData[i*w + j]);
-        //}
-    //}
-
-    cvSaveImage("foo2.png",imageShirtHSV);
+	saveImage(imageShirtHSV);
 	//------- Saving the image
-
-
-
+	
 	cvNamedWindow("Shirt", 1);
     cvShowImage("Shirt", imageShirtHSV);
 	cvWaitKey();
