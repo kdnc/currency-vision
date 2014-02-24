@@ -8,7 +8,7 @@
 #include <opencv\cvaux.h>
 #include <opencv\cxcore.h>
 #include <opencv\highgui.h>
-
+#include "opencv2/nonfree/features2d.hpp"
 
 using namespace std;
 using namespace cv;
@@ -95,7 +95,7 @@ int getPixelColorType(int H, int S, int V)
 	return color;
 }
 
-void thresh_callback(int, void* )
+Mat thresh_callback(int, void* )
 {
   Mat threshold_output;
   vector<vector<Point> > contours;
@@ -146,11 +146,7 @@ void thresh_callback(int, void* )
   rectangle(src, bounding_rect,  Scalar(0,255,0),1, 8,0);  
 
   Mat croppedImage = src(bounding_rect);
-
-  /// Show in a window
-  namedWindow( "Contours", WINDOW_AUTOSIZE );
-  imshow( "Contours", src );
-  imshow( "Cropped Image", croppedImage );
+  return croppedImage;
 }
 
 int main(int argc, const char **argv)
@@ -162,7 +158,7 @@ int main(int argc, const char **argv)
 	//------------- EDGE DETECTION - BEGIN ---------------
 
 	/// Load source image and convert it to gray
-	src = imread( "img4.jpg", 1 );
+	src = imread( "50_note_on_black_background_1 (Medium).jpg", 1 );
 
 	/// Convert image to gray and blur it
 	cvtColor( src, src_gray, COLOR_BGR2GRAY );
@@ -173,8 +169,13 @@ int main(int argc, const char **argv)
 	namedWindow( source_window, WINDOW_AUTOSIZE );
 	imshow( source_window, src );
 
-	createTrackbar( " Threshold:", "Source", &thresh, max_thresh, thresh_callback );
-	thresh_callback( 0, 0 );
+	//createTrackbar( " Threshold:", "Source", &thresh, max_thresh, thresh_callback );
+	Mat croppedImage = thresh_callback( 0, 0 );
+	
+	/// Show in a window
+	namedWindow( "Contours", WINDOW_AUTOSIZE );
+	imshow( "Contours - ", src );
+	imshow( "Cropped Image - ", croppedImage );
 
 	//------------- EDGE DETECTION - END   ---------------
 
@@ -186,10 +187,11 @@ int main(int argc, const char **argv)
 	//copy(infile.begin(), infile.end(), strFileImage);
 	//strFileImage[infile.size()] = '\0'; // don't forget the terminating 0
 
-	char *strFileImage = "img4.jpg";	// default file
+	//char *strFileImage = "img4.jpg";	// default file
 	//char *strFileImage = "20_new_note_1 (Medium)_cropped.jpg";
 
-	IplImage *imageIn = cvLoadImage(strFileImage, CV_LOAD_IMAGE_UNCHANGED);
+	//IplImage *imageIn = cvLoadImage(strFileImage, CV_LOAD_IMAGE_UNCHANGED);
+	IplImage *imageIn = cvCloneImage(&(IplImage)croppedImage);
 
 	IplImage *imageShirt = cvCloneImage(imageIn);
 
@@ -241,6 +243,80 @@ int main(int argc, const char **argv)
 
 	//------------- COLOR DETECTION - END ---------------
 
+	//------------- Flann Feature Matching - BEGIN---------------
+
+	  //if( argc != 3 )
+  //{ readme(); return -1; }
+
+  Mat img_1 = imread( "template.png", IMREAD_GRAYSCALE );
+  //Mat img_2 = imread( "50note1.jpg", IMREAD_GRAYSCALE );
+  Mat img_2 = Mat(croppedImage);
+
+  if( !img_1.data || !img_2.data )
+  { std::cout<< " --(!) Error reading images " << std::endl; return -1; }
+
+  //-- Step 1: Detect the keypoints using SURF Detector
+  int minHessian = 400;
+
+  SurfFeatureDetector detector( minHessian );
+
+  std::vector<KeyPoint> keypoints_1, keypoints_2;
+
+  detector.detect( img_1, keypoints_1 );
+  detector.detect( img_2, keypoints_2 );
+
+  //-- Step 2: Calculate descriptors (feature vectors)
+  SurfDescriptorExtractor extractor;
+
+  Mat descriptors_1, descriptors_2;
+
+  extractor.compute( img_1, keypoints_1, descriptors_1 );
+  extractor.compute( img_2, keypoints_2, descriptors_2 );
+
+  //-- Step 3: Matching descriptor vectors using FLANN matcher
+  FlannBasedMatcher matcher;
+  std::vector< DMatch > matches;
+  matcher.match( descriptors_1, descriptors_2, matches );
+
+  double max_dist = 0; double min_dist = 100;
+
+  //-- Quick calculation of max and min distances between keypoints
+  for( int i = 0; i < descriptors_1.rows; i++ )
+  { double dist = matches[i].distance;
+    if( dist < min_dist ) min_dist = dist;
+    if( dist > max_dist ) max_dist = dist;
+  }
+
+  printf("-- Max dist : %f \n", max_dist );
+  printf("-- Min dist : %f \n", min_dist );
+
+  //-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
+  //-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
+  //-- small)
+  //-- PS.- radiusMatch can also be used here.
+  std::vector< DMatch > good_matches;
+
+  for( int i = 0; i < descriptors_1.rows; i++ )
+  { if( matches[i].distance <= max(2*min_dist, 0.02) )
+    { good_matches.push_back( matches[i]); }
+  }
+
+  //-- Draw only "good" matches
+  Mat img_matches;
+  drawMatches( img_1, keypoints_1, img_2, keypoints_2,
+               good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
+               vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+
+  //-- Show detected matches
+  imshow( "Good Matches - ", img_matches );
+
+  for( int i = 0; i < (int)good_matches.size(); i++ )
+  { printf( "-- Good Match [%d] Keypoint 1: %d  -- Keypoint 2: %d  \n", i, good_matches[i].queryIdx, good_matches[i].trainIdx ); }
+
+
+  //------------- Flann Feature Matching - END---------------
+
+
 	//------- Saving the image
 	saveImage(imageShirtHSV);
 	//------- Saving the image
@@ -249,7 +325,7 @@ int main(int argc, const char **argv)
     cvShowImage("Shirt", imageShirtHSV);
 	cvWaitKey();
 	// Free resources.
-	delete[] strFileImage;
+	//delete[] strFileImage;
 	cvReleaseImage(&imageShirtHSV);
     cvReleaseImage(&imageShirt);
     cvReleaseImage(&imageIn);
