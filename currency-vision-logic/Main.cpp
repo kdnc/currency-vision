@@ -1,6 +1,7 @@
 #include <cstdio>	// Used for "printf"
 #include <string>	// Used for C++ strings
 #include <iostream>	// Used for C++ cout print statements
+#include <fstream>
 //#include <cmath>	// Used to calculate square-root for statistics
 
 // Include OpenCV libraries
@@ -60,6 +61,7 @@ void saveImage(IplImage *imageShirtHSV)
     //}
 
     cvSaveImage("foo3.png",imageShirtHSV);
+
 }
 
 // Determine what type of color the HSV pixel is. Returns the colorType between 0 and NUM_COLOR_TYPES.
@@ -151,14 +153,21 @@ Mat thresh_callback(int, void* )
 
 int main(int argc, const char **argv)
 {
-	//CommandLineParser parser(argc, argv, keys);
-	//string infile = parser.get<std::string>("input");
-	//string outdir = parser.get<std::string>("outdir");
+	ofstream a_file;
+	a_file.open("output.txt");
+	a_file << "test";
+	
+	CommandLineParser parser(argc, argv, keys);
+	string infile = parser.get<std::string>("input");
+	string outdir = parser.get<std::string>("outdir");
 
 	//------------- EDGE DETECTION - BEGIN ---------------
 
-	/// Load source image and convert it to gray
-	src = imread( "50_note_on_black_background_1 (Medium).jpg", 1 );
+	if(infile == "" && outdir == ""){
+		src = imread( "50_note_on_black_background_1_(Medium).jpg", 1 );
+	} else {
+		src = imread( infile, 1 );
+	}
 
 	/// Convert image to gray and blur it
 	cvtColor( src, src_gray, COLOR_BGR2GRAY );
@@ -180,7 +189,6 @@ int main(int argc, const char **argv)
 	//------------- EDGE DETECTION - END   ---------------
 
 	
-
 	//------------- COLOR DETECTION - BEGIN ---------------
 
 	//char *strFileImage = new char[infile.size() + 1];
@@ -232,25 +240,32 @@ int main(int argc, const char **argv)
 	for (int i=0; i<NUM_COLOR_TYPES; i++) {
 		int v = tallyColors[i];
 		cout << sCTypes[i] << " " << (v*100/pixels) << "%, ";
+		a_file << sCTypes[i] << " " << (v*100/pixels) << "%, ";
 		if (v > tallyMaxCount) {
 			tallyMaxCount = tallyColors[i];
 			tallyMaxIndex = i;
 		}
 	}
 	cout << endl;
+	
 	int percentage = initialConfidence * (tallyMaxCount * 100 / pixels);
 	cout << "Color of currency note: " << sCTypes[tallyMaxIndex] << " (" << percentage << "% confidence)." << endl << endl;
-
+	a_file << "Color of currency note: ";
+	a_file << sCTypes[tallyMaxIndex];
+	a_file << " (";
+	a_file << percentage;
+	a_file << "% confidence).";
+	
 	//------------- COLOR DETECTION - END ---------------
 
 	//------------- Flann Feature Matching - BEGIN---------------
 
 	  //if( argc != 3 )
   //{ readme(); return -1; }
-
   Mat img_1 = imread( "template.png", IMREAD_GRAYSCALE );
   //Mat img_2 = imread( "50note1.jpg", IMREAD_GRAYSCALE );
   Mat img_2 = Mat(croppedImage);
+  cvtColor( img_2, img_2, COLOR_BGR2GRAY );
 
   if( !img_1.data || !img_2.data )
   { std::cout<< " --(!) Error reading images " << std::endl; return -1; }
@@ -309,21 +324,26 @@ int main(int argc, const char **argv)
 
   //-- Show detected matches
   imshow( "Good Matches - ", img_matches );
-
+  imwrite("img_matches.png", img_matches);
+  
   for( int i = 0; i < (int)good_matches.size(); i++ )
   { printf( "-- Good Match [%d] Keypoint 1: %d  -- Keypoint 2: %d  \n", i, good_matches[i].queryIdx, good_matches[i].trainIdx ); }
 
 
   //------------- Flann Feature Matching - END---------------
 
-
 	//------- Saving the image
 	saveImage(imageShirtHSV);
 	//------- Saving the image
-	
+	cout << "This is the data which gets returned to the php server code";
+	a_file << "Then Came here";
 	cvNamedWindow("Shirt", 1);
     cvShowImage("Shirt", imageShirtHSV);
-	cvWaitKey();
+	a_file.close();
+	if(infile == "" && outdir == ""){
+		cvWaitKey();
+	}
+
 	// Free resources.
 	//delete[] strFileImage;
 	cvReleaseImage(&imageShirtHSV);
