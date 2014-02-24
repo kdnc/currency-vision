@@ -1,4 +1,4 @@
-package org.opencv.samples.colorblobdetect;
+package com.currencyvision;
 
 import java.util.HashMap;
 import java.util.List;
@@ -204,14 +204,17 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 
         if (mIsColorSelected && !goneInsideFunction) {
         	goneInsideFunction = true;
-            mDetector.process(mRgba);
-            List<MatOfPoint> contours = mDetector.getContours();
+//            mDetector.process(mRgba);
+//            List<MatOfPoint> contours = mDetector.getContours();
             
             Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_BGR2HSV);
             
 //            Log.e(TAG, "Contours count: " + contours.size());
 //            Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
             
+            
+			Size sz = new Size(100, 100);
+            Imgproc.resize(mRgba, mRgba, sz, 0 , 0, Imgproc.INTER_CUBIC );
             
             
         	int h = mRgba.height();				// Pixel height
@@ -236,9 +239,9 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
         			// Get the HSV pixel components
         			
         			double[] pix = mRgba.get(y, x);
-        			int hVal = (int)pixelsTotal[(y*rowSize) + (x*3) + 0];	// Hue
-        			int sVal = (int)pixelsTotal[(y*rowSize) + (x*3) + 1];	// Saturation
-        			int vVal = (int)pixelsTotal[(y*rowSize) + (x*3) + 2];	// Value (Brightness)
+        			int hVal = (int)pixelsTotal[(y*rowSize) + (x) + 0];	// Hue
+        			int sVal = (int)pixelsTotal[(y*rowSize) + (x) + 1];	// Saturation
+        			int vVal = (int)pixelsTotal[(y*rowSize) + (x) + 2];	// Value (Brightness)
 //        			int hVal = (int)pix[0];	// Hue
 //        			int sVal = (int)pix[1];	// Saturation
 //        			int vVal = (int)pix[2];	// Value (Brightness)
@@ -283,11 +286,11 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 
         	
 
-            Mat colorLabel = mRgba.submat(4, 68, 4, 68);
-            colorLabel.setTo(mBlobColorRgba);
-
-            Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
-            mSpectrum.copyTo(spectrumLabel);
+//            Mat colorLabel = mRgba.submat(4, 68, 4, 68);
+//            colorLabel.setTo(mBlobColorRgba);
+//
+//            Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
+//            mSpectrum.copyTo(spectrumLabel);
         }
 
         return mRgba;

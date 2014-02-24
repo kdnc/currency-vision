@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package org.opencv.samples.colorblobdetect;
+package com.currencyvision;
 
 public final class R {
     public static final class attr {
@@ -36,20 +36,49 @@ containing a value of this type.
          */
         public static final int show_fps=0x7f010000;
     }
+    public static final class dimen {
+        /**  Default screen margins, per the Android Design guidelines. 
+
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
+    
+         */
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
+    }
     public static final class drawable {
         public static final int icon=0x7f020000;
     }
     public static final class id {
+        public static final int action_settings=0x7f040006;
         public static final int any=0x7f040000;
         public static final int back=0x7f040001;
-        public static final int color_blob_detection_activity_surface_view=0x7f040003;
+        public static final int btnCapture=0x7f040003;
+        public static final int color_blob_detection_activity_surface_view=0x7f040005;
+        public static final int edit_message=0x7f040004;
         public static final int front=0x7f040002;
     }
     public static final class layout {
-        public static final int color_blob_detection_surface_view=0x7f030000;
+        public static final int activity_camera_demo=0x7f030000;
+        public static final int activity_display_message=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int color_blob_detection_surface_view=0x7f030003;
+    }
+    public static final class menu {
+        public static final int camera_demo=0x7f070000;
+        public static final int display_message=0x7f070001;
+        public static final int main=0x7f070002;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
+        public static final int action_settings=0x7f060004;
+        public static final int app_name=0x7f060000;
+        public static final int button_send=0x7f060003;
+        public static final int camera=0x7f060008;
+        public static final int edit_message=0x7f060002;
+        public static final int hello_world=0x7f060001;
+        public static final int title_activity_camera_demo=0x7f060007;
+        public static final int title_activity_display_message=0x7f060006;
+        public static final int title_activity_main=0x7f060005;
     }
     public static final class styleable {
         /** Attributes that can be used with a CameraBridgeViewBase.
@@ -58,8 +87,8 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #CameraBridgeViewBase_camera_id org.opencv.samples.colorblobdetect:camera_id}</code></td><td></td></tr>
-           <tr><td><code>{@link #CameraBridgeViewBase_show_fps org.opencv.samples.colorblobdetect:show_fps}</code></td><td></td></tr>
+           <tr><td><code>{@link #CameraBridgeViewBase_camera_id com.currencyvision:camera_id}</code></td><td></td></tr>
+           <tr><td><code>{@link #CameraBridgeViewBase_show_fps com.currencyvision:show_fps}</code></td><td></td></tr>
            </table>
            @see #CameraBridgeViewBase_camera_id
            @see #CameraBridgeViewBase_show_fps
@@ -68,7 +97,7 @@ containing a value of this type.
             0x7f010000, 0x7f010001
         };
         /**
-          <p>This symbol is the offset where the {@link org.opencv.samples.colorblobdetect.R.attr#camera_id}
+          <p>This symbol is the offset where the {@link com.currencyvision.R.attr#camera_id}
           attribute's value can be found in the {@link #CameraBridgeViewBase} array.
 
 
@@ -88,11 +117,11 @@ containing a value of this type.
 <tr><td><code>back</code></td><td>99</td><td></td></tr>
 <tr><td><code>front</code></td><td>98</td><td></td></tr>
 </table>
-          @attr name org.opencv.samples.colorblobdetect:camera_id
+          @attr name com.currencyvision:camera_id
         */
         public static final int CameraBridgeViewBase_camera_id = 1;
         /**
-          <p>This symbol is the offset where the {@link org.opencv.samples.colorblobdetect.R.attr#show_fps}
+          <p>This symbol is the offset where the {@link com.currencyvision.R.attr#show_fps}
           attribute's value can be found in the {@link #CameraBridgeViewBase} array.
 
 
@@ -102,7 +131,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name org.opencv.samples.colorblobdetect:show_fps
+          @attr name com.currencyvision:show_fps
         */
         public static final int CameraBridgeViewBase_show_fps = 0;
     };

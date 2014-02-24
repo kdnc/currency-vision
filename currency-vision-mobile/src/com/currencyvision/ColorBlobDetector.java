@@ -1,4 +1,4 @@
-package org.opencv.samples.colorblobdetect;
+package com.currencyvision;
 
 import java.util.ArrayList;
 import java.util.Iterator;
