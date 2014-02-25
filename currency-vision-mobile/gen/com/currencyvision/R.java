@@ -50,24 +50,28 @@ containing a value of this type.
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f040006;
+        public static final int action_settings=0x7f040008;
         public static final int any=0x7f040000;
         public static final int back=0x7f040001;
-        public static final int btnCapture=0x7f040003;
-        public static final int color_blob_detection_activity_surface_view=0x7f040005;
-        public static final int edit_message=0x7f040004;
+        public static final int btnCapture=0x7f040005;
+        public static final int btnSpeak=0x7f040004;
+        public static final int color_blob_detection_activity_surface_view=0x7f040007;
+        public static final int edit_message=0x7f040006;
         public static final int front=0x7f040002;
+        public static final int txtText=0x7f040003;
     }
     public static final class layout {
-        public static final int activity_camera_demo=0x7f030000;
-        public static final int activity_display_message=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int color_blob_detection_surface_view=0x7f030003;
+        public static final int activity_android_text_to_speech=0x7f030000;
+        public static final int activity_camera_demo=0x7f030001;
+        public static final int activity_display_message=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int color_blob_detection_surface_view=0x7f030004;
     }
     public static final class menu {
-        public static final int camera_demo=0x7f070000;
-        public static final int display_message=0x7f070001;
-        public static final int main=0x7f070002;
+        public static final int android_text_to_speech=0x7f070000;
+        public static final int camera_demo=0x7f070001;
+        public static final int display_message=0x7f070002;
+        public static final int main=0x7f070003;
     }
     public static final class string {
         public static final int action_settings=0x7f060004;
@@ -76,6 +80,7 @@ containing a value of this type.
         public static final int camera=0x7f060008;
         public static final int edit_message=0x7f060002;
         public static final int hello_world=0x7f060001;
+        public static final int title_activity_android_text_to_speech=0x7f060009;
         public static final int title_activity_camera_demo=0x7f060007;
         public static final int title_activity_display_message=0x7f060006;
         public static final int title_activity_main=0x7f060005;

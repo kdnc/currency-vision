@@ -10,5 +10,6 @@
     <string name="title_activity_display_message">My Message</string>
     <string name="title_activity_camera_demo">CameraDemoActivity</string>
     <string name="camera">Camera</string>
-    
+    <string name="title_activity_android_text_to_speech">AndroidTextToSpeechActivity</string>
+
 </resources>

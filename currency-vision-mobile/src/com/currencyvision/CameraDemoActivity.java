@@ -124,7 +124,7 @@ public class CameraDemoActivity extends Activity {
 	                    
 	      	            HttpClient httpclient = new DefaultHttpClient();
 	      	            HttpPost httppost = new HttpPost(url);
-	      	          	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//	      	          	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	      	            HttpResponse response = httpclient.execute(httppost);
 						String the_string_response = convertResponseToString(response);
 						System.out.println("success");
