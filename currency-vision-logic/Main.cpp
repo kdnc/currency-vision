@@ -155,6 +155,7 @@ int main(int argc, const char **argv)
 {
 	ofstream a_file;
 	a_file.open("output.txt");
+	String output = "";
 	
 	CommandLineParser parser(argc, argv, keys);
 	string infile = parser.get<std::string>("input");
@@ -241,6 +242,11 @@ int main(int argc, const char **argv)
 		int v = tallyColors[i];
 		cout << sCTypes[i] << " " << (v*100/pixels) << "%, ";
 		a_file << sCTypes[i] << " " << (v*100/pixels) << "%, ";
+		output += sCTypes[i];
+		output += " ";
+		output += to_string(v*100/pixels);
+		output += "%, ";
+
 		if (v > tallyMaxCount) {
 			tallyMaxCount = tallyColors[i];
 			tallyMaxIndex = i;
@@ -250,6 +256,11 @@ int main(int argc, const char **argv)
 	
 	int percentage = initialConfidence * (tallyMaxCount * 100 / pixels);
 	cout << "Color of currency note: " << sCTypes[tallyMaxIndex] << " (" << percentage << "% confidence)." << endl << endl;
+	output += "Color of currency note: ";
+	output += sCTypes[tallyMaxIndex];
+	output += " (" + to_string(percentage);
+	output += "% confidence).";
+
 	a_file << "Color of currency note: ";
 	a_file << sCTypes[tallyMaxIndex];
 	a_file << " (";
@@ -360,6 +371,9 @@ int main(int argc, const char **argv)
 
 		a_file << "| Good matches count - ";
 		a_file << good_matches.size();
+		output += "| Good matches count - ";
+		output += to_string(good_matches.size());
+
         //Show detected matches
         imshow( "Good Matches", img_matches );
 
@@ -369,7 +383,8 @@ int main(int argc, const char **argv)
 	//------- Saving the image
 	//saveImage(imageShirtHSV);
 	//------- Saving the image
-	cout << "This is the data which gets returned to the php server code";
+	//cout << "This is the data which gets returned to the php server code";
+	cout << output;
 
 	//cvNamedWindow("Shirt", 1);
     //cvShowImage("Shirt", imageShirtHSV);
