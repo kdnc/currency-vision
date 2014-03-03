@@ -23,8 +23,8 @@
 
 	$cmd  = 'currency-vision-logic6 --input="'.$filename.'" --outdir="'.dirname($filename).'"';
 	$last = exec($cmd, $out);
-	echo 'last - ' . $last;
-	echo '[out ]- ' . $out;
+	//echo 'last - ' . $last;
+	//echo '[out ]- ' . $out;
 	if (strpos($last, 'Error:') === false)
 	{
 		$res = array('success' => true);
@@ -39,4 +39,5 @@
 		$res = array('success' => false, 'msg' => $last);
 
 	header('Content-Type: application/json');
-	echo json_encode($res);
+	//echo json_encode($res);
+	echo $last;
