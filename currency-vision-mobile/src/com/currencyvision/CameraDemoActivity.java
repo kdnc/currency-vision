@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +31,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.widget.Toast;
 
 public class CameraDemoActivity extends Activity {
 
@@ -44,31 +46,46 @@ public class CameraDemoActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState)
 	{
 	    super.onCreate(savedInstanceState);
+	    requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 	    setContentView(R.layout.activity_camera_demo);
+	    getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.window_title);
 
 	    //here,we are making a folder named picFolder to store pics taken by the camera using this application
         final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/picFolder/"; 
         File newdir = new File(dir); 
         newdir.mkdirs();
 
-	    Button capture = (Button) findViewById(R.id.btnCapture);
-	    capture.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	            // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
-	            count++;
-	            file = dir+count+".jpg";
-	            File newfile = new File(file);
-	            try {
-	                newfile.createNewFile();
-	            } catch (IOException e) {
-	            	Log.d("Error", "Error");
-	            }       
-	            outputFileUri = Uri.fromFile(newfile);
-	            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); 
-	            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-	            startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
-	        }
-	    });
+//	    Button capture = (Button) findViewById(R.id.btnCapture);
+//	    capture.setOnClickListener(new View.OnClickListener() {
+//	        public void onClick(View v) {
+//	            // here,counter will be incremented each time,and the picture taken by camera will be stored as 1.jpg,2.jpg and likewise.
+//	            count++;
+//	            file = dir+count+".jpg";
+//	            File newfile = new File(file);
+//	            try {
+//	                newfile.createNewFile();
+//	            } catch (IOException e) {
+//	            	Log.d("Error", "Error");
+//	            }       
+//	            outputFileUri = Uri.fromFile(newfile);
+//	            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); 
+//	            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//	            startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
+//	        }
+//	    });
+	    
+	    count++;
+        file = dir+count+".jpg";
+        File newfile = new File(file);
+        try {
+            newfile.createNewFile();
+        } catch (IOException e) {
+        	Log.d("Error", "Error");
+        }       
+        outputFileUri = Uri.fromFile(newfile);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); 
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
 	}
 
 	@Override
@@ -111,7 +128,7 @@ public class CameraDemoActivity extends Activity {
 	        	Thread trd = new Thread(new Runnable(){
 	  	    	  @Override
 	  	    	  public void run(){
-	  	            String url = "http://10.200.124.41/currency-vision/web-service/test.php";
+	  	            String url = "http://10.200.124.41/currency-vision/web-service/currency-detect.php";
 	
 	      	        try {
 	      	        	ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -126,8 +143,26 @@ public class CameraDemoActivity extends Activity {
 	      	            HttpPost httppost = new HttpPost(url);
 //	      	          	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	      	            HttpResponse response = httpclient.execute(httppost);
-						String the_string_response = convertResponseToString(response);
+						final String the_string_response = convertResponseToString(response);
 						System.out.println("success");
+						
+						
+						CameraDemoActivity.this.runOnUiThread(new Runnable(){
+
+	                         @Override
+	                         public void run(){
+	                             try {
+	                            	 openAlert(the_string_response);
+	                             } catch (Exception e) {
+	                            	 System.out.println("Error in http connection "+e.toString());
+//	                                 alertDialog.setMessage(e.getMessage());
+//	                                 handler.sendEmptyMessage(1);
+//	                                 progressDialog.cancel();
+	                             } 
+	                        }
+
+	                   });
+						
 	      	        }catch(Exception e){
 	                    System.out.println("Error in http connection "+e.toString());
 	      	        }
@@ -165,6 +200,43 @@ public class CameraDemoActivity extends Activity {
             }
             return res;
        }
+	    
+	    private void openAlert(String result) {
+			 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CameraDemoActivity.this);
+		     
+			 alertDialogBuilder.setTitle(this.getTitle()+ " decision");
+			 alertDialogBuilder.setMessage(result);
+			 // set positive button: Yes message
+			 alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// go to a new activity of the app
+						Intent mainActivity = new Intent(getApplicationContext(),
+	                            MainActivity.class);
+			            startActivity(mainActivity);	
+						dialog.cancel();
+					}
+				  });
+			 // set negative button: No message
+//			 alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog,int id) {
+//						// cancel the alert box and put a Toast to the user
+//						dialog.cancel();
+//						Toast.makeText(getApplicationContext(), "You chose a negative answer", 
+//								Toast.LENGTH_LONG).show();
+//					}
+//				});
+			 // set neutral button: Exit the app message
+//			 alertDialogBuilder.setNeutralButton("Exit the app",new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog,int id) {
+//						// exit the app and go to the HOME
+//						CameraDemoActivity.this.finish();
+//					}
+//				});
+			 
+			 AlertDialog alertDialog = alertDialogBuilder.create();
+			 // show alert
+			 alertDialog.show();
+		}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
