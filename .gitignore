@@ -213,3 +213,6 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+currency-vision-mobile/gen/com/currencyvision/BuildConfig.java
+currency-vision-mobile/gen/com/currencyvision/R.java
+currency-vision-mobile/gen/org/opencv/R.java
