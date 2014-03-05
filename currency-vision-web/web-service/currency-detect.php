@@ -17,8 +17,13 @@
     // fwrite($file, $binary);
     // fclose($file);
 
-
-	$filename = '50_note_on_black_background_2_(Medium).jpg';
+	$filename = 'note_20_1';
+	
+	if(isset($_GET['data'])){
+		$filename = $_GET['data'];
+	}
+	$filename .= '.jpg';
+	
 	//file_put_contents("$filename", file_get_contents("php://input"));
 
 	$cmd  = 'currency-vision-logic6 --input="'.$filename.'" --outdir="'.dirname($filename).'"';
