@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center" >
+    android:background="#D5E1EB">
 
 <!--     <EditText android:id="@+id/edit_message" -->
 <!--         android:layout_weight="1" -->
@@ -11,11 +11,139 @@
 <!--         android:layout_height="wrap_content" -->
 <!--         android:hint="@string/edit_message" /> -->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:onClick="sendMessage"
-        android:text="@string/button_recognize" />
+	<TableRow
+	    android:id="@+id/tableRow1"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:padding="5dip" >
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="20 Rs  (Note 1)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="20 Rs  (Note 3)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:text="20 Rs  (Note 3)" />
+	</TableRow>
+	
+	<TableRow
+	    android:id="@+id/tableRow2"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:padding="5dip" >
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="50 Rs  (Note 1)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="50 Rs  (Note 3)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:text="50 Rs  (Note 3)" />
+	</TableRow>
+	
+	<TableRow
+	    android:id="@+id/tableRow3"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:padding="5dip" >
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="100 Rs  (Note 1)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="100 Rs  (Note 3)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:text="100 Rs  (Note 3)" />
+	</TableRow>
+	
+	<TableRow
+	    android:id="@+id/tableRow4"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:padding="5dip" >
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="500 Rs  (Note 1)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="500 Rs  (Note 3)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:text="500 Rs  (Note 3)" />
+	</TableRow>
+	
+	<TableRow
+	    android:id="@+id/tableRow5"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:padding="5dip" >
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="1000 Rs  (Note 1)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:layout_marginRight="6dp"
+	        android:text="1000 Rs  (Note 3)" />
+
+	    <Button
+	        style="@style/btnStyleBreakerBay"
+	        android:layout_weight="1"
+	        android:onClick="sendMessage"
+	        android:text="1000 Rs  (Note 3)" />
+	</TableRow>
     
-</RelativeLayout>
+</TableLayout >

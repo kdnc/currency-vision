@@ -4,13 +4,21 @@
     android:layout_height="wrap_content"
     android:background="#323331"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingLeft="5dip" >
+    android:orientation="vertical"
+    android:paddingLeft="5dp" >
 
-    <ImageView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
+<!--     <ImageView -->
+<!--         android:id="@+id/header" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:src="@drawable/header" /> -->
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/header" />
+        android:layout_gravity="center"
+        android:text="Currency Vision"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

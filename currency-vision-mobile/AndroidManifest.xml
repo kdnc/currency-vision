@@ -7,7 +7,8 @@
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/CustomTheme" >
+        android:theme="@style/CustomTheme" 
+        >
         <activity
             android:name="com.currencyvision.ColorBlobDetectionActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -30,22 +31,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.currencyvision.DisplayMessageActivity"
-            android:label="@string/title_activity_display_message"
-            android:parentActivityName="com.currencyvision.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.currencyvision.MainActivity" />
-        </activity>
-        <activity
-            android:name="com.currencyvision.CameraDemoActivity"
-            android:label="@string/title_activity_camera_demo"
-            android:parentActivityName="com.currencyvision.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.currencyvision.MainActivity" />
-        </activity>
+<!--         <activity -->
+<!--             android:name="com.currencyvision.DisplayMessageActivity" -->
+<!--             android:label="@string/title_activity_display_message" -->
+<!--             android:parentActivityName="com.currencyvision.MainActivity" > -->
+<!--             <meta-data -->
+<!--                 android:name="android.support.PARENT_ACTIVITY" -->
+<!--                 android:value="com.currencyvision.MainActivity" /> -->
+<!--         </activity> -->
+<!--         <activity -->
+<!--             android:name="com.currencyvision.CameraDemoActivity" -->
+<!--             android:label="@string/title_activity_camera_demo" -->
+<!--             android:parentActivityName="com.currencyvision.MainActivity" > -->
+<!--             <meta-data -->
+<!--                 android:name="android.support.PARENT_ACTIVITY" -->
+<!--                 android:value="com.currencyvision.MainActivity" /> -->
+<!--         </activity> -->
         <activity
             android:name="com.currencyvision.AndroidTextToSpeechActivity"
             android:label="@string/title_activity_android_text_to_speech" >
