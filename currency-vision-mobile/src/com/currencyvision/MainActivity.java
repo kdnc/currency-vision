@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -53,7 +54,47 @@ public class MainActivity extends Activity {
 	    
 //	    sendCapturedImageToServer();
 		
-		String serverURL = "http://10.0.2.2/currency-vision/web-service/currency-detect.php";
+		String noteName = "";
+		if(view.getId() == R.id.note_20_1){
+			noteName = "note_20_1";
+		} else if(view.getId() == R.id.note_20_2){
+			noteName = "note_20_2";
+		} else if(view.getId() == R.id.note_20_3){
+			noteName = "note_20_3";
+		} else if(view.getId() == R.id.note_50_1){
+			noteName = "note_50_1";
+		} else if(view.getId() == R.id.note_50_2){
+			noteName = "note_50_2";
+		} else if(view.getId() == R.id.note_50_3){
+			noteName = "note_50_3";
+		} else if(view.getId() == R.id.note_100_1){
+			noteName = "note_100_1";
+		} else if(view.getId() == R.id.note_100_2){
+			noteName = "note_100_2";
+		} else if(view.getId() == R.id.note_100_3){
+			noteName = "note_100_3";
+		} else if(view.getId() == R.id.note_500_1){
+			noteName = "note_500_1";
+		} else if(view.getId() == R.id.note_500_2){
+			noteName = "note_500_2";
+		} else if(view.getId() == R.id.note_500_3){
+			noteName = "note_500_3";
+		} else if(view.getId() == R.id.note_1000_1){
+			noteName = "note_1000_1";
+		} else if(view.getId() == R.id.note_1000_2){
+			noteName = "note_1000_2";
+		} else if(view.getId() == R.id.note_1000_3){
+			noteName = "note_1000_3";
+		}
+		
+		String data = "";
+	    try{
+			// Set Request parameter
+		    data +="?" + URLEncoder.encode("data", "UTF-8") + "=" + noteName;
+		} catch (UnsupportedEncodingException e) {
+		    e.printStackTrace();
+		} 
+		String serverURL = "http://10.0.2.2/currency-vision/web-service/currency-detect.php"+data;
         // Use AsyncTask execute Method To Prevent ANR Problem
         new LongOperation().execute(serverURL);
 	}
@@ -80,19 +121,19 @@ public class MainActivity extends Activity {
         private String content;
         private String error = null;
         private ProgressDialog Dialog = new ProgressDialog(MainActivity.this);
-        String data =""; 
+//        String data =""; 
          
         protected void onPreExecute() {
             // NOTE: You can call UI Element here.
             //Start Progress Dialog (Message)
             Dialog.setMessage("Please wait..");
             Dialog.show();
-            try{
-                // Set Request parameter
-                data +="&" + URLEncoder.encode("data", "UTF-8") + "=20rupee";
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } 
+//            try{
+//                // Set Request parameter
+//                data +="&" + URLEncoder.encode("data", "UTF-8") + "=20rupee";
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            } 
         }
   
         // Call after onPreExecute method
@@ -108,7 +149,7 @@ public class MainActivity extends Activity {
               URLConnection conn = url.openConnection(); 
               conn.setDoOutput(true); 
               OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream()); 
-              wr.write( data ); 
+//              wr.write( data ); 
               wr.flush(); 
            
               // Get the server response 
