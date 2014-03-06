@@ -20,7 +20,7 @@ const char* keys =
 	"{o|outdir| |The output directory}"
 };
 
-// Various color types for detected shirt colors.
+// Various color types for detected currency note colors.
 enum                             {cBLACK=0,cWHITE, cGREY, cRED, cORANGE, cYELLOW, cGREEN, cAQUA, cBLUE, cPURPLE, cPINK,  NUM_COLOR_TYPES};
 char* sCTypes[NUM_COLOR_TYPES] = {"Black", "White","Grey","Red","Orange","Yellow","Green","Aqua","Blue","Purple","Pink"};
 uchar cCTHue[NUM_COLOR_TYPES] =    {0,       0,      0,     0,     20,      30,      55,    85,   115,    138,     161};
@@ -32,10 +32,10 @@ int thresh = 100;
 int max_thresh = 255;
 RNG rng(12345);
 
-void saveImage(IplImage *imageShirtHSV)
+void saveImage(IplImage *imageCurrencyHSV)
 {
-	int h = imageShirtHSV->height;				// Pixel height
-	int w = imageShirtHSV->width;				// Pixel width
+	int h = imageCurrencyHSV->height;				// Pixel height
+	int w = imageCurrencyHSV->width;				// Pixel width
 
 	CvSize size;
     //IplImage *rgb_img;
@@ -56,11 +56,11 @@ void saveImage(IplImage *imageShirtHSV)
         //for (j = 0;j < size.width; j++)
         //{
         // confirming all values print correctly
-        //printf("%c, ", imageShirtHSV->imageData[i*w + j]);
+        //printf("%c, ", imageCurrencyHSV->imageData[i*w + j]);
         //}
     //}
 
-    cvSaveImage("foo3.png",imageShirtHSV);
+    cvSaveImage("converted_image.png",imageCurrencyHSV);
 
 }
 
@@ -195,7 +195,7 @@ int main(int argc, const char **argv)
 	if(infile == "" && outdir == ""){
 		infile = "note_20_1.jpg";
 	}
-	output += infile;
+	output += "Note - " + infile + "|";
 
 	char *strFileImage = new char[infile.size() + 1];
 	copy(infile.begin(), infile.end(), strFileImage);
@@ -207,15 +207,15 @@ int main(int argc, const char **argv)
 	IplImage *imageIn = cvLoadImage(strFileImage, CV_LOAD_IMAGE_UNCHANGED);
 	//IplImage *imageIn = cvCloneImage(&(IplImage)croppedImage);
 
-	IplImage *imageShirt = cvCloneImage(imageIn);
+	IplImage *imageCurrency = cvCloneImage(imageIn);
 
-	IplImage *imageShirtHSV = cvCreateImage(cvGetSize(imageShirt), 8, 3);
-	cvCvtColor(imageShirt, imageShirtHSV, CV_BGR2HSV);	// (note that OpenCV stores RGB images in B,G,R order.
+	IplImage *imageCurrencyHSV = cvCreateImage(cvGetSize(imageCurrency), 8, 3);
+	cvCvtColor(imageCurrency, imageCurrencyHSV, CV_BGR2HSV);	// (note that OpenCV stores RGB images in B,G,R order.
 
-	int h = imageShirtHSV->height;				// Pixel height
-	int w = imageShirtHSV->width;				// Pixel width
-	int rowSize = imageShirtHSV->widthStep;		// Size of row in bytes, including extra padding
-	char *imOfs = imageShirtHSV->imageData;	// Pointer to the start of the image HSV pixels.
+	int h = imageCurrencyHSV->height;				// Pixel height
+	int w = imageCurrencyHSV->width;				// Pixel width
+	int rowSize = imageCurrencyHSV->widthStep;		// Size of row in bytes, including extra padding
+	char *imOfs = imageCurrencyHSV->imageData;	// Pointer to the start of the image HSV pixels.
 
 	float initialConfidence = 1.0f;
 
@@ -223,7 +223,7 @@ int main(int argc, const char **argv)
 	int tallyColors[NUM_COLOR_TYPES];
 	for (int i=0; i<NUM_COLOR_TYPES; i++)
 		tallyColors[i] = 0;
-	// Scan the shirt image to find the tally of pixel colors
+	// Scan the currency image to find the tally of pixel colors
 	for (int y=0; y<h; y++) {
 		for (int x=0; x<w; x++) {
 			// Get the HSV pixel components
@@ -261,7 +261,7 @@ int main(int argc, const char **argv)
 	
 	int percentage = initialConfidence * (tallyMaxCount * 100 / pixels);
 	cout << "Color of currency note: " << sCTypes[tallyMaxIndex] << " (" << percentage << "% confidence)." << endl << endl;
-	output += "Color of currency note: ";
+	output += "|Color of currency note: ";
 	output += sCTypes[tallyMaxIndex];
 	output += " (" + to_string(percentage);
 	output += "% confidence).";
@@ -271,6 +271,8 @@ int main(int argc, const char **argv)
 	a_file << " (";
 	a_file << percentage;
 	a_file << "% confidence).";
+
+	saveImage(imageCurrencyHSV);
 	
 	//------------- COLOR DETECTION - END ---------------
 
@@ -386,13 +388,13 @@ int main(int argc, const char **argv)
   //------------- Flann Feature Matching - END---------------
 
 	//------- Saving the image
-	//saveImage(imageShirtHSV);
+	//saveImage(imageCurrencyHSV);
 	//------- Saving the image
 	//cout << "This is the data which gets returned to the php server code";
 	cout << output;
 
-	//cvNamedWindow("Shirt", 1);
-    //cvShowImage("Shirt", imageShirtHSV);
+	//cvNamedWindow("Currency", 1);
+    //cvShowImage("Currency", imageCurrencyHSV);
 	a_file.close();
 	if(infile == "" || outdir == ""){
 		cvWaitKey();
@@ -400,8 +402,8 @@ int main(int argc, const char **argv)
 
 	// Free resources.
 	delete[] strFileImage;
-	cvReleaseImage(&imageShirtHSV);
-    cvReleaseImage(&imageShirt);
+	cvReleaseImage(&imageCurrencyHSV);
+    cvReleaseImage(&imageCurrency);
     cvReleaseImage(&imageIn);
 	return 0;
 }
