@@ -1,2 +1,0 @@
-update pattern matching code in currency-vision
-output color detection result and pattern matching result
