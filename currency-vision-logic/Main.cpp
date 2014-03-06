@@ -60,7 +60,7 @@ void saveImage(IplImage *imageCurrencyHSV)
         //}
     //}
 
-    cvSaveImage("converted_image.png",imageCurrencyHSV);
+    cvSaveImage("output/converted_image.png",imageCurrencyHSV);
 
 }
 
@@ -154,7 +154,7 @@ Mat thresh_callback(int, void* )
 int main(int argc, const char **argv)
 {
 	ofstream a_file;
-	a_file.open("output.txt");
+	a_file.open("output/output.txt");
 	String output = "";
 	
 	CommandLineParser parser(argc, argv, keys);
@@ -193,9 +193,9 @@ int main(int argc, const char **argv)
 	//------------- COLOR DETECTION - BEGIN ---------------
 
 	if(infile == "" && outdir == ""){
-		infile = "note_20_1.jpg";
+		infile = "resources/note_20_1.jpg";
 	}
-	output += "Note - " + infile + "|";
+	output += "Note Location - " + infile + "|";
 
 	char *strFileImage = new char[infile.size() + 1];
 	copy(infile.begin(), infile.end(), strFileImage);
@@ -397,6 +397,8 @@ int main(int argc, const char **argv)
     //cvShowImage("Currency", imageCurrencyHSV);
 	a_file.close();
 	if(infile == "" || outdir == ""){
+		cvNamedWindow("Currency", 1);
+		cvShowImage("Currency", imageCurrencyHSV);
 		cvWaitKey();
 	}
 
