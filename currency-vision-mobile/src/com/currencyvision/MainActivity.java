@@ -103,7 +103,15 @@ public class MainActivity extends Activity {
 		 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
 	     
 		 alertDialogBuilder.setTitle("Currency Note Result");
-		 alertDialogBuilder.setMessage(result);
+		 String[] results = result.split("\\|");
+		 String resultTokenized = "";
+		 for(int i=0; i<results.length; i++){
+			 resultTokenized += results[i];
+			 if(i+1 < results.length){
+				 resultTokenized += "\n\n";
+			 }
+		 }
+		 alertDialogBuilder.setMessage(resultTokenized);
 
 		 alertDialogBuilder.setPositiveButton("OK",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int id) {
