@@ -20,6 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PatternMatchingUtil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PatternMatchingUtil.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B07CF94B-CFB5-456D-9B18-95816CE476D7}</ProjectGuid>
