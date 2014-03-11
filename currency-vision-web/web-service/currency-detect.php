@@ -21,7 +21,7 @@
 	if(isset($_GET['data'])){
 		$filename .= $_GET['data'];
 	} else {
-		$filename .= 'note_20_1';
+		$filename .= '50_note_on_black_background_1_(Medium)';
 	}
 	$filename .= '.jpg';
 	
