@@ -39,14 +39,13 @@
 <!--                 android:name="android.support.PARENT_ACTIVITY" -->
 <!--                 android:value="com.currencyvision.MainActivity" /> -->
 <!--         </activity> -->
-<!--         <activity -->
-<!--             android:name="com.currencyvision.CameraDemoActivity" -->
-<!--             android:label="@string/title_activity_camera_demo" -->
-<!--             android:parentActivityName="com.currencyvision.MainActivity" > -->
-<!--             <meta-data -->
-<!--                 android:name="android.support.PARENT_ACTIVITY" -->
-<!--                 android:value="com.currencyvision.MainActivity" /> -->
-<!--         </activity> -->
+        <activity
+            android:name="com.currencyvision.CameraDemoActivity"
+            android:label="@string/title_activity_camera_demo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.currencyvision.MainActivity" />
+        </activity>
         <activity
             android:name="com.currencyvision.AndroidTextToSpeechActivity"
             android:label="@string/title_activity_android_text_to_speech" >

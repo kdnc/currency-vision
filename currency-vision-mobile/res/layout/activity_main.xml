@@ -5,160 +5,178 @@
     android:layout_height="fill_parent"
     android:background="#D5E1EB">
 
-<!--     <EditText android:id="@+id/edit_message" -->
-<!--         android:layout_weight="1" -->
-<!--         android:layout_width="0dp" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:hint="@string/edit_message" /> -->
+<!-- 	<TableRow -->
+<!-- 	    android:id="@+id/tableRow1" -->
+<!-- 	    android:layout_width="fill_parent" -->
+<!-- 	    android:layout_height="fill_parent" -->
+<!-- 	    android:padding="5dip" > -->
 
-	<TableRow
-	    android:id="@+id/tableRow1"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:padding="5dip" >
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_20_1" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.20  (Note 1)" /> -->
 
-	    <Button
-	        android:id="@+id/note_20_1"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.20  (Note 1)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_20_2" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.20  (Note 2)" /> -->
 
-	    <Button
-	        android:id="@+id/note_20_2"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.20  (Note 2)" />
-
-	    <Button
-	        android:id="@+id/note_20_3"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:text="Rs.20  (Note 3)" />
-	</TableRow>
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_20_3" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:text="Rs.20  (Note 3)" /> -->
+<!-- 	</TableRow> -->
 	
-	<TableRow
-	    android:id="@+id/tableRow2"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:padding="5dip" >
+<!-- 	<TableRow -->
+<!-- 	    android:id="@+id/tableRow2" -->
+<!-- 	    android:layout_width="fill_parent" -->
+<!-- 	    android:layout_height="fill_parent" -->
+<!-- 	    android:padding="5dip" > -->
 
-	    <Button
-	        android:id="@+id/note_50_1"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.50  (Note 1)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_50_1" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.50  (Note 1)" /> -->
 
-	    <Button
-	        android:id="@+id/note_50_2"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.50  (Note 2)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_50_2" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.50  (Note 2)" /> -->
 
-	    <Button
-	        android:id="@+id/note_50_3"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:text="Rs.50  (Note 3)" />
-	</TableRow>
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_50_3" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:text="Rs.50  (Note 3)" /> -->
+<!-- 	</TableRow> -->
 	
-	<TableRow
-	    android:id="@+id/tableRow3"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:padding="5dip" >
+<!-- 	<TableRow -->
+<!-- 	    android:id="@+id/tableRow3" -->
+<!-- 	    android:layout_width="match_parent" -->
+<!-- 	    android:layout_height="match_parent" -->
+<!-- 	    android:padding="5dip" > -->
 
-	    <Button
-	        android:id="@+id/note_100_1"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.100  (Note 1)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_100_1" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.100  (Note 1)" /> -->
 
-	    <Button
-	        android:id="@+id/note_100_2"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.100  (Note 2)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_100_2" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.100  (Note 2)" /> -->
 
-	    <Button
-	        android:id="@+id/note_100_3"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:text="Rs.100  (Note 3)" />
-	</TableRow>
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_100_3" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:text="Rs.100  (Note 3)" /> -->
+<!-- 	</TableRow> -->
 	
-	<TableRow
-	    android:id="@+id/tableRow4"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:padding="5dip" >
+<!-- 	<TableRow -->
+<!-- 	    android:id="@+id/tableRow4" -->
+<!-- 	    android:layout_width="match_parent" -->
+<!-- 	    android:layout_height="match_parent" -->
+<!-- 	    android:padding="5dip" > -->
 
-	    <Button
-	        android:id="@+id/note_500_1"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.500  (Note 1)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_500_1" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.500  (Note 1)" /> -->
 
-	    <Button
-	        android:id="@+id/note_500_2"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.500  (Note 2)" />
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_500_2" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.500  (Note 2)" /> -->
 
-	    <Button
-	        android:id="@+id/note_500_3"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:text="Rs.500 (Note 3)" />
-	</TableRow>
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_500_3" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:text="Rs.500 (Note 3)" /> -->
+<!-- 	</TableRow> -->
 	
-	<TableRow
-	    android:id="@+id/tableRow5"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:padding="5dip" >
+<!-- 	<TableRow -->
+<!-- 	    android:id="@+id/tableRow5" -->
+<!-- 	    android:layout_width="match_parent" -->
+<!-- 	    android:layout_height="match_parent" -->
+<!-- 	    android:padding="5dip" > -->
+
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_1000_1" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.1000  (Note 1)" /> -->
+
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_1000_2" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:layout_marginRight="6dp" -->
+<!-- 	        android:text="Rs.1000  (Note 2)" /> -->
+
+<!-- 	    <Button -->
+<!-- 	        android:id="@+id/note_1000_3" -->
+<!-- 	        style="@style/btnStyleBreakerBay" -->
+<!-- 	        android:layout_weight="1" -->
+<!-- 	        android:onClick="sendMessage" -->
+<!-- 	        android:text="Rs.1000  (Note 3)" /> -->
+<!-- 	</TableRow> -->
+    
+    	<Button
+    	    android:id="@+id/recognize_btn"
+    	    style="@style/btnStyleBreakerBay"
+    	    android:layout_marginBottom="10dp"
+    	    android:layout_marginLeft="20dp"
+    	    android:layout_marginRight="20dp"
+    	    android:layout_marginTop="20dp"
+    	    android:layout_weight="1"
+    	    android:onClick="sendMessage"
+    	    android:text="Recognize Note"
+    	    android:textSize="50sp" />
 
 	    <Button
-	        android:id="@+id/note_1000_1"
+	        android:id="@+id/count_btn"
 	        style="@style/btnStyleBreakerBay"
 	        android:layout_weight="1"
 	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.1000  (Note 1)" />
-
-	    <Button
-	        android:id="@+id/note_1000_2"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:layout_marginRight="6dp"
-	        android:text="Rs.1000  (Note 2)" />
-
-	    <Button
-	        android:id="@+id/note_1000_3"
-	        style="@style/btnStyleBreakerBay"
-	        android:layout_weight="1"
-	        android:onClick="sendMessage"
-	        android:text="Rs.1000  (Note 3)" />
-	</TableRow>
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="10dp"
+	        android:layout_marginBottom="20dp"
+	        android:text="Count Notes" 
+	        android:textSize="50sp" />
     
 </TableLayout >

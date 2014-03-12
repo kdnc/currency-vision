@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Note;
@@ -43,60 +44,27 @@ public class MainActivity extends Activity {
 	}
 	
 	public void sendMessage(View view) {
-//	    Intent intent = new Intent(this, CameraDemoActivity.class);
-//	    EditText editText = (EditText) findViewById(R.id.edit_message);
-//	    String message = editText.getText().toString();
-//	    intent.putExtra(EXTRA_MESSAGE, message);
-//	    startActivity(intent);
+	    Intent intent = new Intent(this, CameraDemoActivity.class);
+	    startActivity(intent);
 		
 //		Intent intent = new Intent(this, AndroidTextToSpeechActivity.class);
 //	    startActivity(intent);
 	    
-//	    sendCapturedImageToServer();
+//		String noteName = "";
+//		if(view.getId() == R.id.note_20_1){
+//			noteName = "note_20_1";
+//		}
 		
-		String noteName = "";
-		if(view.getId() == R.id.note_20_1){
-			noteName = "note_20_1";
-		} else if(view.getId() == R.id.note_20_2){
-			noteName = "note_20_2";
-		} else if(view.getId() == R.id.note_20_3){
-			noteName = "note_20_3";
-		} else if(view.getId() == R.id.note_50_1){
-			noteName = "note_50_1";
-		} else if(view.getId() == R.id.note_50_2){
-			noteName = "note_50_2";
-		} else if(view.getId() == R.id.note_50_3){
-			noteName = "note_50_3";
-		} else if(view.getId() == R.id.note_100_1){
-			noteName = "note_100_1";
-		} else if(view.getId() == R.id.note_100_2){
-			noteName = "note_100_2";
-		} else if(view.getId() == R.id.note_100_3){
-			noteName = "note_100_3";
-		} else if(view.getId() == R.id.note_500_1){
-			noteName = "note_500_1";
-		} else if(view.getId() == R.id.note_500_2){
-			noteName = "note_500_2";
-		} else if(view.getId() == R.id.note_500_3){
-			noteName = "note_500_3";
-		} else if(view.getId() == R.id.note_1000_1){
-			noteName = "note_1000_1";
-		} else if(view.getId() == R.id.note_1000_2){
-			noteName = "note_1000_2";
-		} else if(view.getId() == R.id.note_1000_3){
-			noteName = "note_1000_3";
-		}
-		
-		String data = "";
-	    try{
-			// Set Request parameter
-		    data +="?" + URLEncoder.encode("data", "UTF-8") + "=" + noteName;
-		} catch (UnsupportedEncodingException e) {
-		    e.printStackTrace();
-		} 
-		String serverURL = "http://10.0.2.2/currency-vision/web-service/currency-detect.php"+data;
-        // Use AsyncTask execute Method To Prevent ANR Problem
-        new LongOperation().execute(serverURL);
+//		String data = "";
+//	    try{
+//			// Set Request parameter
+//		    data +="?" + URLEncoder.encode("data", "UTF-8") + "=" + noteName;
+//		} catch (UnsupportedEncodingException e) {
+//		    e.printStackTrace();
+//		} 
+//		String serverURL = "http://10.0.2.2/currency-vision/web-service/currency-detect.php"+data;
+//        // Use AsyncTask execute Method To Prevent ANR Problem
+//        new LongOperation().execute(serverURL);
 	}
 	
 	private void openAlert(String result) {
