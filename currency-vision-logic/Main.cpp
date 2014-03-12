@@ -61,6 +61,7 @@ int main(int argc, const char **argv)
 	ofstream a_file;
 	a_file.open("output/output.txt");
 	String output = "";
+	String result = "";
 	
 	CommandLineParser parser(argc, argv, keys);
 	string infile = parser.get<std::string>("input");
@@ -109,9 +110,12 @@ int main(int argc, const char **argv)
 			match_note = templates[i];
 		}
 	}
-	a_file << match_note;
-	a_file << "| Good matchess count - ";
-	a_file << good_matches;
+	//a_file << match_note;
+	//a_file << "| Good matchess count - ";
+	//a_file << good_matches;
+
+	result = match_note;
+
 	output += match_note;
 	output += "| Good matches counts - ";
 	output += to_string(good_matches);
@@ -125,8 +129,8 @@ int main(int argc, const char **argv)
 	//saveImage(imageCurrencyHSV);
 
 	//This is the data which gets returned to the php server code
-	cout << output;
-
+	cout << result;
+	a_file << output;
 	a_file.close();
 	if(infile == "" || outdir == ""){
 		//cvNamedWindow("Currency", 1);
