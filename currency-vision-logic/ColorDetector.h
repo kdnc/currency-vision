@@ -12,9 +12,10 @@
 #include <opencv\highgui.h>
 #include "opencv2/nonfree/features2d.hpp"
 
-class PatternMatchingUtil
+class ColorDetector
 {
-	public:
-		int detectPattern(cv::Mat croppedImage, std::string templateName);
+public:
+	int getPixelColorType(int H, int S, int V);
+	std::string detectColor(cv::Mat croppedImage);
 };
 

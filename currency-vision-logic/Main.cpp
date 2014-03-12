@@ -11,7 +11,9 @@
 #include <opencv\highgui.h>
 #include "opencv2/nonfree/features2d.hpp"
 
-#include "PatternMatchingUtil.h";
+#include "PatternMatcher.h";
+#include "BoundaryDetector.h";
+#include "ColorDetector.h";
 
 using namespace std;
 using namespace cv;
@@ -21,18 +23,6 @@ const char* keys =
 	"{i|input| |The source image}"
 	"{o|outdir| |The output directory}"
 };
-
-// Various color types for detected currency note colors.
-enum                             {cBLACK=0,cWHITE, cGREY, cRED, cORANGE, cYELLOW, cGREEN, cAQUA, cBLUE, cPURPLE, cPINK,  NUM_COLOR_TYPES};
-char* sCTypes[NUM_COLOR_TYPES] = {"Black", "White","Grey","Red","Orange","Yellow","Green","Aqua","Blue","Purple","Pink"};
-uchar cCTHue[NUM_COLOR_TYPES] =    {0,       0,      0,     0,     20,      30,      55,    85,   115,    138,     161};
-uchar cCTSat[NUM_COLOR_TYPES] =    {0,       0,      0,    255,   255,     255,     255,   255,   255,    255,     255};
-uchar cCTVal[NUM_COLOR_TYPES] =    {0,      255,    120,   255,   255,     255,     255,   255,   255,    255,     255};
-
-Mat src; Mat src_gray;
-int thresh = 100;
-int max_thresh = 255;
-RNG rng(12345);
 
 void saveImage(IplImage *imageCurrencyHSV)
 {
@@ -66,93 +56,6 @@ void saveImage(IplImage *imageCurrencyHSV)
 
 }
 
-// Determine what type of color the HSV pixel is. Returns the colorType between 0 and NUM_COLOR_TYPES.
-int getPixelColorType(int H, int S, int V)
-{
-	int color;
-	if (V < 75)
-		color = cBLACK;
-	else if (V > 190 && S < 27)
-		color = cWHITE;
-	else if (S < 53 && V < 185)
-		color = cGREY;
-	else {	// Is a color
-		if (H < 14)
-			color = cRED;
-		else if (H < 25)
-			color = cORANGE;
-		else if (H < 34)
-			color = cYELLOW;
-		else if (H < 73)
-			color = cGREEN;
-		else if (H < 102)
-			color = cAQUA;
-		else if (H < 127)
-			color = cBLUE;
-		else if (H < 149)
-			color = cPURPLE;
-		else if (H < 175)
-			color = cPINK;
-		else	// full circle 
-			color = cRED;	// back to Red
-	}
-	return color;
-}
-
-Mat thresh_callback(int, void* )
-{
-  Mat threshold_output;
-  vector<vector<Point> > contours;
-  vector<Vec4i> hierarchy;
-
-  /// Detect edges using Threshold
-  threshold( src_gray, threshold_output, thresh, 255, THRESH_BINARY );
-
-  /// Find contours
-  findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-  // Having CV_RETR_EXTERNAL instead of CV_RETR_TREE, will only return the outermost contours.
-  //findContours( threshold_output, contours, hierarchy, CV_RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0) );
-
-  /// Approximate contours to polygons + get bounding rects and circles
-  vector<vector<Point> > contours_poly( contours.size() );
-  vector<Rect> boundRect( contours.size() );
-  vector<Point2f>center( contours.size() );
-  vector<float>radius( contours.size() );
-
-  int largest_area=0;
-  int largest_contour_index=0;
-  Rect bounding_rect;
-
-  for( size_t i = 0; i < contours.size(); i++ ) { 
-	  double a=contourArea( contours[i],false);  //  Find the area of contour
-      if(a>largest_area){
-		largest_area=a;
-		largest_contour_index=i;                //Store the index of largest contour
-		bounding_rect=boundingRect(contours[i]); // Find the bounding rectangle for biggest contour
-      }
-   
-	  approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
-      boundRect[i] = boundingRect( Mat(contours_poly[i]) );
-      minEnclosingCircle( contours_poly[i], center[i], radius[i] );
-  }
-
-  /// Draw polygonal contour + bonding rects + circles
-  Mat drawing = Mat::zeros( threshold_output.size(), CV_8UC3 );
-  for( size_t i = 0; i< contours.size(); i++ ) {
-	 Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-	 //drawContours( src, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-	 //rectangle( src, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
-	 //circle( drawing, center[i], (int)radius[i], color, 2, 8, 0 );
-  }
-
-  Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-  //drawContours( src, contours,largest_contour_index, color, CV_FILLED, 8, hierarchy ); // Draw the largest contour using previously stored index.
-  rectangle(src, bounding_rect,  Scalar(0,255,0),1, 8,0);  
-
-  Mat croppedImage = src(bounding_rect);
-  return croppedImage;
-}
-
 int main(int argc, const char **argv)
 {
 	ofstream a_file;
@@ -163,129 +66,41 @@ int main(int argc, const char **argv)
 	string infile = parser.get<std::string>("input");
 	string outdir = parser.get<std::string>("outdir");
 
-	//------------- EDGE DETECTION - BEGIN ---------------
-
 	if(infile == "" && outdir == ""){
 		infile = "resources/20_new_note_1 (Medium).jpg";
 	}
-	output += "Note Location - " + infile + "|";
-	src = imread( infile, 1 );
-	
-	/// Convert image to gray and blur it
-	cvtColor( src, src_gray, COLOR_BGR2GRAY );
-	blur( src_gray, src_gray, Size(3,3) );
-
-	/// Create Window
-	const char* source_window = "Source";
-	//namedWindow( source_window, WINDOW_AUTOSIZE );
-	//imshow( source_window, src );
-
-	//createTrackbar( " Threshold:", "Source", &thresh, max_thresh, thresh_callback );
-	Mat croppedImage = thresh_callback( 0, 0 );
-	
-	/// Show in a window
-	//namedWindow( "Contours", WINDOW_AUTOSIZE );
-	//imshow( "Contours - ", src );
-	namedWindow( "Cropped Image - ", WINDOW_AUTOSIZE );
-	imshow( "Cropped Image - ", croppedImage );
-
-	//------------- EDGE DETECTION - END   ---------------
-
-	
-	//------------- COLOR DETECTION - BEGIN ---------------
-
-	//if(infile == "" && outdir == ""){
-	//	infile = "resources/note_20_1.jpg";
-	//}
-	//output += "Note Location - " + infile + "|";
 
 	//char *strFileImage = new char[infile.size() + 1];
 	//copy(infile.begin(), infile.end(), strFileImage);
 	//strFileImage[infile.size()] = '\0'; // don't forget the terminating 0
 
 	//char *strFileImage = "img4.jpg";	// default file
-	//char *strFileImage = "20_new_note_1 (Medium)_cropped.jpg";
 
-	//IplImage *imageIn = cvLoadImage(strFileImage, CV_LOAD_IMAGE_UNCHANGED);
-	IplImage *imageIn = cvCloneImage(&(IplImage)croppedImage);
+	output += "Note Location - " + infile + "|";
 
-	IplImage *imageCurrency = cvCloneImage(imageIn);
+	//------------- EDGE DETECTION - BEGIN ---------------
 
-	IplImage *imageCurrencyHSV = cvCreateImage(cvGetSize(imageCurrency), 8, 3);
-	cvCvtColor(imageCurrency, imageCurrencyHSV, CV_BGR2HSV);	// (note that OpenCV stores RGB images in B,G,R order.
+	BoundaryDetector boundaryDetector;
+	Mat croppedImage = boundaryDetector.detectBoundary(infile);
 
-	int h = imageCurrencyHSV->height;				// Pixel height
-	int w = imageCurrencyHSV->width;				// Pixel width
-	int rowSize = imageCurrencyHSV->widthStep;		// Size of row in bytes, including extra padding
-	char *imOfs = imageCurrencyHSV->imageData;	// Pointer to the start of the image HSV pixels.
+	//------------- EDGE DETECTION - END   ---------------
 
-	float initialConfidence = 1.0f;
-
-	// Create an empty tally of pixel counts for each color type
-	int tallyColors[NUM_COLOR_TYPES];
-	for (int i=0; i<NUM_COLOR_TYPES; i++)
-		tallyColors[i] = 0;
-	// Scan the currency image to find the tally of pixel colors
-	for (int y=0; y<h; y++) {
-		for (int x=0; x<w; x++) {
-			// Get the HSV pixel components
-			uchar H = *(uchar*)(imOfs + y*rowSize + x*3 + 0);	// Hue
-			uchar S = *(uchar*)(imOfs + y*rowSize + x*3 + 1);	// Saturation
-			uchar V = *(uchar*)(imOfs + y*rowSize + x*3 + 2);	// Value (Brightness)
-
-			// Determine what type of color the HSV pixel is.
-			int ctype = getPixelColorType(H, S, V);
-			// Keep count of these colors.
-			tallyColors[ctype]++;
-		}
-	}
-
-	// Print a report about color types, and find the max tally
-	//cout << "Number of pixels found using each color type (out of " << (w*h) << ":\n";
-	int tallyMaxIndex = 0;
-	int tallyMaxCount = -1;
-	int pixels = w * h;
-	for (int i=0; i<NUM_COLOR_TYPES; i++) {
-		int v = tallyColors[i];
-		cout << sCTypes[i] << " " << (v*100/pixels) << "%, ";
-		a_file << sCTypes[i] << " " << (v*100/pixels) << "%, ";
-		output += sCTypes[i];
-		output += " ";
-		output += to_string(v*100/pixels);
-		output += "%, ";
-
-		if (v > tallyMaxCount) {
-			tallyMaxCount = tallyColors[i];
-			tallyMaxIndex = i;
-		}
-	}
-	cout << endl;
 	
-	int percentage = initialConfidence * (tallyMaxCount * 100 / pixels);
-	cout << "Color of currency note: " << sCTypes[tallyMaxIndex] << " (" << percentage << "% confidence)." << endl << endl;
-	output += "|Color of currency note: ";
-	output += sCTypes[tallyMaxIndex];
-	output += " (" + to_string(percentage);
-	output += "% confidence).";
+	//------------- COLOR DETECTION - BEGIN ---------------
 
-	a_file << "Color of currency note: ";
-	a_file << sCTypes[tallyMaxIndex];
-	a_file << " (";
-	a_file << percentage;
-	a_file << "% confidence).";
-
-	//saveImage(imageCurrencyHSV);
-	
+	ColorDetector colorDetector;
+	output += colorDetector.detectColor(croppedImage);
+		
 	//------------- COLOR DETECTION - END ---------------
 
-	//------------- Flann Feature Matching - BEGIN---------------
 
-	
+	//------------- Flann Feature Matching - BEGIN---------------
+		
 	string templates[] = {"50template","20template","100template"};
 	int good_matches = 0;
 	string match_note = "";
 	int size = sizeof(templates)/sizeof(string);
-	PatternMatchingUtil patternMatcherUtil;
+	PatternMatcher patternMatcherUtil;
 
 	for(int i=0; i<size; i++){
 		int matches_count = patternMatcherUtil.detectPattern(croppedImage, templates[i]);
@@ -305,29 +120,24 @@ int main(int argc, const char **argv)
 	 //       //Show detected matches
 	 //   imshow( "Good Matches", img_matches );
 
+	//------------- Flann Feature Matching - END---------------
 
-
-  //------------- Flann Feature Matching - END---------------
-
-	//------- Saving the image
 	//saveImage(imageCurrencyHSV);
-	//------- Saving the image
-	//cout << "This is the data which gets returned to the php server code";
+
+	//This is the data which gets returned to the php server code
 	cout << output;
 
-	//cvNamedWindow("Currency", 1);
-    //cvShowImage("Currency", imageCurrencyHSV);
 	a_file.close();
 	if(infile == "" || outdir == ""){
-		cvNamedWindow("Currency", 1);
-		cvShowImage("Currency", imageCurrencyHSV);
+		//cvNamedWindow("Currency", 1);
+		//cvShowImage("Currency", imageCurrencyHSV);
 		cvWaitKey();
 	}
 
 	// Free resources.
 	//delete[] strFileImage;
-	cvReleaseImage(&imageCurrencyHSV);
+	/*cvReleaseImage(&imageCurrencyHSV);
     cvReleaseImage(&imageCurrency);
-    cvReleaseImage(&imageIn);
+    cvReleaseImage(&imageIn);*/
 	return 0;
 }

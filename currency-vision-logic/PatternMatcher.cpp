@@ -1,4 +1,4 @@
-#include "PatternMatchingUtil.h"
+#include "PatternMatcher.h"
 #include <cstdio>	// Used for "printf"
 #include <string>	// Used for C++ strings
 #include <iostream>	// Used for C++ cout print statements
@@ -16,7 +16,7 @@ using namespace std;
 using namespace cv;
 
 
-	int PatternMatchingUtil::detectPattern(cv::Mat croppedImage, std::string templateName)
+	int PatternMatcher::detectPattern(cv::Mat croppedImage, std::string templateName)
 	{
 		string templateFile = "resources/" + templateName + ".png";
 		Mat object = imread( templateFile, CV_LOAD_IMAGE_GRAYSCALE );

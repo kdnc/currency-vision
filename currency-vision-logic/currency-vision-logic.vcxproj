@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoundaryDetector.cpp" />
+    <ClCompile Include="ColorDetector.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PatternMatchingUtil.cpp" />
+    <ClCompile Include="PatternMatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PatternMatchingUtil.h" />
+    <ClInclude Include="BoundaryDetector.h" />
+    <ClInclude Include="ColorDetector.h" />
+    <ClInclude Include="PatternMatcher.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B07CF94B-CFB5-456D-9B18-95816CE476D7}</ProjectGuid>
