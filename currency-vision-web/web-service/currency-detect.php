@@ -46,4 +46,14 @@
 
 	header('Content-Type: application/json');
 	//echo json_encode($res);
-	echo $last;
+	
+	$output = "";
+	if($last == "50template"){
+		$output = "50";
+	} else if($last == "20template"){
+		$output = "20";
+	} else if($last == "100template"){
+		$output = "100";
+	}
+	
+	echo $output;
