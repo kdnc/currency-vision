@@ -1,24 +1,26 @@
 package com.currencyvision;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.view.Menu;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.Menu;
+import android.widget.TextView;
+
+import com.currencyvision.model.ModelLocator;
 
 public class AndroidTextToSpeechActivity extends Activity implements TextToSpeech.OnInitListener{
 
 	private TextToSpeech tts;
 	String value = "";
+	ModelLocator model = ModelLocator.getInstance();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,9 @@ public class AndroidTextToSpeechActivity extends Activity implements TextToSpeec
 			value = extras.getString("new_variable_name");
 		}
 		
-		openAlert(value);
+		model.getCurrencyCount().setCount(Integer.parseInt(value));
+		
+		openAlert(model.getCurrencyCount().getCount());
 		
 		tts = new TextToSpeech(this, this);
 		 
@@ -58,7 +62,11 @@ public class AndroidTextToSpeechActivity extends Activity implements TextToSpeec
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "This Language is not supported");
             } else {
-                speakOut(value);
+        		if(model.getTaskMode() == ModelLocator.RECOGNIZE_MODE){
+        			speakOut("This is a " + value + " rupee note.");
+        		} else if(model.getTaskMode() == ModelLocator.COUNT_MODE){
+        			speakOut("Total currency value is " + model.getCurrencyCount().getCount() + " rupees.");
+        		}
             }
  
         } else {
@@ -72,39 +80,56 @@ public class AndroidTextToSpeechActivity extends Activity implements TextToSpeec
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
     
-    private void openAlert(String result) {
-		 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AndroidTextToSpeechActivity.this);
-	     
-		 alertDialogBuilder.setTitle(this.getTitle()+ " decision");
-		 alertDialogBuilder.setMessage(result);
-		 // set positive button: Yes message
-		 alertDialogBuilder.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog,int id) {
-					// go to a new activity of the app
-					AndroidTextToSpeechActivity.this.finish();
-					dialog.cancel();
-				}
-			  });
-		 // set negative button: No message
-//		 alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
-//				public void onClick(DialogInterface dialog,int id) {
-//					// cancel the alert box and put a Toast to the user
-//					dialog.cancel();
-//					Toast.makeText(getApplicationContext(), "You chose a negative answer", 
-//							Toast.LENGTH_LONG).show();
-//				}
-//			});
-		 // set neutral button: Exit the app message
-//		 alertDialogBuilder.setNeutralButton("Exit the app",new DialogInterface.OnClickListener() {
-//				public void onClick(DialogInterface dialog,int id) {
-//					// exit the app and go to the HOME
-//					CameraDemoActivity.this.finish();
-//				}
-//			});
-		 
-		 AlertDialog alertDialog = alertDialogBuilder.create();
-		 // show alert
-		 alertDialog.show();
+    private void openAlert(int result) {
+		if(model.getTaskMode() == ModelLocator.RECOGNIZE_MODE){
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AndroidTextToSpeechActivity.this);
+		     
+//			 alertDialogBuilder.setTitle(this.getTitle()+ " decision");
+			 alertDialogBuilder.setMessage(Integer.toString(result));
+			 // set positive button: Yes message
+			 alertDialogBuilder.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// go to a new activity of the app
+						AndroidTextToSpeechActivity.this.finish();
+						dialog.cancel();
+					}
+				  });
+			 
+			 AlertDialog alertDialog = alertDialogBuilder.create();
+			 // show alert
+			 alertDialog.show();
+			 TextView txtMsg = (TextView) alertDialog.findViewById(android.R.id.message);
+			 txtMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 80);
+			 txtMsg.setGravity(Gravity.CENTER);
+		} else if(model.getTaskMode() == ModelLocator.COUNT_MODE){
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AndroidTextToSpeechActivity.this);
+		     
+//			 alertDialogBuilder.setTitle(this.getTitle()+ " decision");
+			 alertDialogBuilder.setMessage(Integer.toString(result));
+			 // set positive button: Next message
+			 alertDialogBuilder.setPositiveButton("Count",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						AndroidTextToSpeechActivity.this.finish();
+						Intent intent = new Intent(AndroidTextToSpeechActivity.this, CameraDemoActivity.class);
+						startActivity(intent);
+						dialog.cancel();
+					}
+				  });
+			 // set negative button: Stop message
+			 alertDialogBuilder.setNegativeButton("Stop",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						AndroidTextToSpeechActivity.this.finish();
+						dialog.cancel();
+					}
+				});
+			 
+			 AlertDialog alertDialog = alertDialogBuilder.create();
+			 // show alert
+			 alertDialog.show();
+			 TextView txtMsg = (TextView) alertDialog.findViewById(android.R.id.message);
+			 txtMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 80);
+			 txtMsg.setGravity(Gravity.CENTER);
+		}
 	}
 
 	@Override

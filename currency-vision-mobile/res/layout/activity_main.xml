@@ -163,7 +163,7 @@
     	    android:layout_marginRight="20dp"
     	    android:layout_marginTop="20dp"
     	    android:layout_weight="1"
-    	    android:onClick="sendMessage"
+    	    android:onClick="buttonClicked"
     	    android:text="Recognize Note"
     	    android:textSize="50sp" />
 
@@ -171,7 +171,7 @@
 	        android:id="@+id/count_btn"
 	        style="@style/btnStyleBreakerBay"
 	        android:layout_weight="1"
-	        android:onClick="sendMessage"
+	        android:onClick="buttonClicked"
 	        android:layout_marginLeft="20dp"
 	        android:layout_marginRight="20dp"
 	        android:layout_marginTop="10dp"

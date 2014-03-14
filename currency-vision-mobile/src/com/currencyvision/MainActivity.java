@@ -11,6 +11,9 @@ import java.net.URLEncoder;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.currencyvision.model.CurrencyCount;
+import com.currencyvision.model.ModelLocator;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -20,9 +23,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Note;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -43,13 +49,17 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	public void sendMessage(View view) {
-	    Intent intent = new Intent(this, CameraDemoActivity.class);
-	    startActivity(intent);
+	public void buttonClicked(View view) {
+		ModelLocator model = ModelLocator.getInstance();
+		if(view.getId() == R.id.recognize_btn){
+			model.setTaskMode(ModelLocator.RECOGNIZE_MODE);
+		} else if(view.getId() == R.id.count_btn){
+			model.setTaskMode(ModelLocator.COUNT_MODE);
+		}
+		model.setCurrencyCount(new CurrencyCount());
+		Intent intent = new Intent(this, CameraDemoActivity.class);
+		startActivity(intent);
 		
-//		Intent intent = new Intent(this, AndroidTextToSpeechActivity.class);
-//	    startActivity(intent);
-	    
 //		String noteName = "";
 //		if(view.getId() == R.id.note_20_1){
 //			noteName = "note_20_1";

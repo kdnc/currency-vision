@@ -5,16 +5,16 @@
     android:orientation="horizontal"
     tools:context=".AndroidTextToSpeechActivity" >
 
-    <EditText android:id="@+id/txtText"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="android text to speech" />
+<!--     <EditText android:id="@+id/txtText" -->
+<!--         android:layout_weight="1" -->
+<!--         android:layout_width="0dp" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:hint="android text to speech" /> -->
     
-    <Button
-        android:id="@+id/btnSpeak"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speak out" />
+<!--     <Button -->
+<!--         android:id="@+id/btnSpeak" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:text="Speak out" /> -->
 
 </LinearLayout>
