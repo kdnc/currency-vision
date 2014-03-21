@@ -1,25 +1,30 @@
 <?php
 	//------- Temporary code to check the call from Android is received to server ----------
-	//$file = 'output/output2.txt';
-	// Open the file to get existing content
-	//$current = file_get_contents($file);
-	// Append a new person to the file
-	//$current .= rand() . " - test\n";
-	// Write the contents back to the file
-	//file_put_contents($file, $current);
+	if(false){
+		$file = 'output/output2.txt';
+		// Open the file to get existing content
+		$current = file_get_contents($file);
+		// Append a new person to the file
+		$current .= rand() . " - test\n";
+		// Write the contents back to the file
+		file_put_contents($file, $current);
+	}
 	
-	// Save the received image file in server
-	// $base=$_REQUEST['image'];
-    // $binary=base64_decode($base);
-    // header('Content-Type: bitmap; charset=utf-8');
-    // $file = fopen('uploaded_image.jpg', 'wb');
-    // fwrite($file, $binary);
-    // fclose($file);
-
+	$isImageReceived = false;
+	if($isImageReceived){
+		// Save the received image file in server
+		$base=$_REQUEST['image'];
+		$binary=base64_decode($base);
+		header('Content-Type: bitmap; charset=utf-8');
+		$file = fopen('resources/uploaded_image.jpg', 'wb');
+		fwrite($file, $binary);
+		fclose($file);
+	}
+		
 	$filename = 'resources/';
 	
-	if(isset($_GET['data'])){
-		$filename .= $_GET['data'];
+	if($isImageReceived){
+		$filename .= 'uploaded_image';
 	} else {
 		$filename .= '50_note_on_black_background_1_(Medium)';
 	}
